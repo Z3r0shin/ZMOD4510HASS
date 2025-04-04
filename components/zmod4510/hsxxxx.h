@@ -20,7 +20,7 @@
 #define HSXXXX_H
 
 #include <stdbool.h>
-#include "hal/hal.h"
+#include "hal.h"
 
 /**
  * @brief Data structure holding humidity/temperature results
