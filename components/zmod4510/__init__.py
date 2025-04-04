@@ -3,8 +3,6 @@ import esphome.config_validation as cv
 from esphome.components import sensor, i2c
 from esphome.const import CONF_ID, CONF_UPDATE_INTERVAL
 
-
-AUTO_LOAD = ["sensor"]
 # This ensures that the I2C component is available.
 DEPENDENCIES = ['i2c']
 
