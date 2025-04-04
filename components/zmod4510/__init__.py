@@ -34,7 +34,7 @@ CONFIG_SCHEMA = cv.Schema({
 async def to_code(config):
     var = cg.new_Pvariable(config[CONF_ID])
     await cg.register_component(var, config)
-    cg.add(var.set_update_interval(config[CONF_UPDATE_INTERVAL].total_milliseconds()))
+    cg.add(var.set_update_interval(config[CONF_UPDATE_INTERVAL]))
     cg.add(var.set_i2c_address(config[CONF_ADDRESS]))
     if CONF_NO2 in config:
         no2_sensor = await sensor.new_sensor(config[CONF_NO2])
