@@ -1,22 +1,20 @@
 #pragma once
 
-#include "esphome/core/component.h"        // This header defines Component and PollingComponent.
+#include "esphome/core/component.h"
 #include "esphome/components/i2c/i2c.h"
 #include "esphome/components/sensor/sensor.h"
 #include <cstring>  // For memcpy
 
-// Include the Renesas library headers via extern "C"
- #include "zmod4xxx_types.h"
- #include "hal.h"
- #include "zmod4xxx_hal.h"
- #include "zmod4xxx.h"
- #include "hsxxxx.h"
- #include "hs3xxx.h"
- #include "hs4xxx.h"
- #include "no2_o3.h"
- #include "zmod4510_config_no2_o3.h"
- #include "zmod4xxx_cleaning.h"
-
+// Wrap Renesas C headers in extern "C" to avoid C++ name mangling.
+extern "C" {
+  #include "zmod4xxx_types.h"
+  #include "hal.h"
+  #include "zmod4xxx_hal.h"
+  #include "zmod4xxx.h"
+  #include "no2_o3.h"
+  #include "zmod4510_config_no2_o3.h"
+  #include "zmod4xxx_cleaning.h"
+}
 
 namespace zmod4510 {
 
@@ -44,8 +42,8 @@ class ZMOD4510 : public esphome::PollingComponent, public esphome::i2c::I2CDevic
 
   // Buffers for configuration and ADC measurement data.
   uint8_t config_[6];
-  uint8_t prod_data_[ZMOD4510_PROD_DATA_LEN];  // ZMOD4510_PROD_DATA_LEN from config header
-  uint8_t adc_buffer_[32];                     // According to measurement configuration length
+  uint8_t prod_data_[ZMOD4510_PROD_DATA_LEN];  // From config header.
+  uint8_t adc_buffer_[32];                     // Based on ADC data length.
 };
 
 }  // namespace zmod4510
