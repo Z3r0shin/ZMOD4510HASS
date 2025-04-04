@@ -1,8 +1,9 @@
 #pragma once
 
 #include "esphome/core/component.h"
-#include "esphome/components/sensor/sensor.h"
+#include "esphome/core/polling_component.h"
 #include "esphome/components/i2c/i2c.h"
+#include "esphome/components/sensor/sensor.h"
 #include <cstring>  // For memcpy
 
 // Include the Renesas library headers via extern "C"
