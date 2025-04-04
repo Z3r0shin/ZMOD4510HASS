@@ -1,20 +1,24 @@
 import esphome.codegen as cg
 import esphome.config_validation as cv
-from esphome.components import sensor, i2c
-from esphome.const import CONF_ID, CONF_UPDATE_INTERVAL, UNIT_PPB
+from esphome.components import i2c
+from esphome.const import CONF_ID, CONF_UPDATE_INTERVAL
 
-DEPENDENCIES = ['i2c', 'sensor']
+# Optionally, define your own unit constant.
+UNIT_PPB = "ppb"
+
+DEPENDENCIES = ['i2c']
 AUTO_LOAD = ["sensor"]
 
-# Create a namespace and declare the main C++ class.
 zmod4510_ns = cg.global_ns.namespace("zmod4510")
 ZMOD4510 = zmod4510_ns.class_("ZMOD4510", i2c.I2CDevice, cg.Component)
 
-# Configuration keys
 CONF_NO2 = "no2"
 CONF_O3 = "o3"
 CONF_AQI = "aqi"
 CONF_I2C_ADDRESS = "i2c_address"
+
+# Use sensor's schema if you want to attach sensors.
+from esphome.components import sensor
 
 CONFIG_SCHEMA = cv.Schema({
     cv.GenerateID(): cv.declare_id(ZMOD4510),
