@@ -1,7 +1,7 @@
 #include <cstdarg>
 #include <cstdio>
 
-namespace esphome {
+// Fallback definition for esp_log_printf_ in global scope if it's not defined.
 #ifndef esp_log_printf_
 static inline void esp_log_printf_(int level, const char *tag, int line, const char *format, ...) {
   va_list args;
@@ -10,7 +10,6 @@ static inline void esp_log_printf_(int level, const char *tag, int line, const c
   va_end(args);
 }
 #endif
-}  // namespace esphome
 
 #include "zmod4510_component.h"
 #include "esphome/core/log.h"
@@ -80,7 +79,7 @@ void ZMOD4510::update() {
     return;
   }
 
-  delay(6000);  // Wait for the measurement to complete (6000 ms for NO₂/O₃ mode).
+  delay(6000);  // Wait for measurement to complete (6000 ms for NO₂/O₃ mode).
 
   ret = zmod4xxx_read_adc_result(&this->dev_, this->adc_buffer_);
   if (ret != ZMOD4XXX_OK) {
