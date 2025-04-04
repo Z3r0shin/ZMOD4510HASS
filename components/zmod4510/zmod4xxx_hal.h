@@ -26,7 +26,6 @@
 #define _ZMOD4XXX_HAL_H_
 
 #include "hal.h"
-#include "zmod4xxx_types.h"
 
 #ifdef __cplusplus
 extern "C" {

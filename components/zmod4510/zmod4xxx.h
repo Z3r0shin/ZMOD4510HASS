@@ -19,8 +19,6 @@
 #ifndef _ZMOD4XXX_H
 #define _ZMOD4XXX_H
 
-#include "zmod4xxx_types.h"
-
 #define ZMOD4XXX_ADDR_PID       (0x00)
 #define ZMOD4XXX_ADDR_CONF      (0x20)
 #define ZMOD4XXX_ADDR_PROD_DATA (0x26)
