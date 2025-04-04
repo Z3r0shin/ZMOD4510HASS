@@ -1,3 +1,17 @@
+#include <cstdarg>
+#include <cstdio>
+
+namespace esphome {
+#ifndef esp_log_printf_
+static inline void esp_log_printf_(int level, const char *tag, int line, const char *format, ...) {
+  va_list args;
+  va_start(args, format);
+  vprintf(format, args);
+  va_end(args);
+}
+#endif
+}  // namespace esphome
+
 #include "zmod4510_component.h"
 #include "esphome/core/log.h"
 #include <Arduino.h>
