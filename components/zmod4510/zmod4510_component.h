@@ -6,6 +6,7 @@
 #include <cstring>  // For memcpy
 
 // Include the Renesas library headers via extern "C"
+ #include "zmod4xxx_types.h"
  #include "hal.h"
  #include "zmod4xxx_hal.h"
  #include "zmod4xxx.h"
