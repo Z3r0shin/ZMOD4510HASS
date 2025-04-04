@@ -23,17 +23,19 @@ from esphome.components import sensor
 CONFIG_SCHEMA = cv.Schema({
     cv.GenerateID(): cv.declare_id(ZMOD4510),
     cv.Optional(CONF_UPDATE_INTERVAL, default="60s"): cv.time_period,
-    cv.Optional(CONF_I2C_ADDRESS, default=0x33): cv.hex_int,
-    cv.Optional(CONF_NO2): sensor.sensor_schema(unit_of_measurement=UNIT_PPB),
-    cv.Optional(CONF_O3): sensor.sensor_schema(unit_of_measurement=UNIT_PPB),
+    cv.Optional(CONF_ADDRESS, default=0x33): cv.hex_int,
+    cv.Optional(CONF_NO2): sensor.sensor_schema(),
+    cv.Optional(CONF_O3): sensor.sensor_schema(),
     cv.Optional(CONF_AQI): sensor.sensor_schema(),
-}).extend(cv.COMPONENT_SCHEMA).extend(i2c.i2c_device_schema(CONF_I2C_ADDRESS))
+}).extend(cv.COMPONENT_SCHEMA).extend(
+    cv.polling_component_schema("60s").extend(i2c.i2c_device_schema(0x33))
+)
 
 async def to_code(config):
     var = cg.new_Pvariable(config[CONF_ID])
     await cg.register_component(var, config)
-    cg.add(var.set_update_interval(config[CONF_UPDATE_INTERVAL]))
-    cg.add(var.set_i2c_address(config[CONF_I2C_ADDRESS]))
+    cg.add(var.set_update_interval(config[CONF_UPDATE_INTERVAL].total_milliseconds()))
+    cg.add(var.set_i2c_address(config[CONF_ADDRESS]))
     if CONF_NO2 in config:
         no2_sensor = await sensor.new_sensor(config[CONF_NO2])
         cg.add(var.set_no2_sensor(no2_sensor))
