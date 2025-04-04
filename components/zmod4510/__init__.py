@@ -15,7 +15,7 @@ ZMOD4510 = zmod4510_ns.class_("ZMOD4510", i2c.I2CDevice, cg.Component)
 CONF_NO2 = "no2"
 CONF_O3 = "o3"
 CONF_AQI = "aqi"
-CONF_I2C_ADDRESS = "i2c_address"
+CONF_ADDRESS = "address"
 
 # Use sensor's schema if you want to attach sensors.
 from esphome.components import sensor
