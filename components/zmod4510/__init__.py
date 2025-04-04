@@ -11,7 +11,7 @@ DEPENDENCIES = ['i2c']
 # Create a namespace for your component.
 zmod4510_ns = cg.global_ns.namespace('zmod4510')
 # Declare the main C++ class. It must be defined in your C++ wrapper.
-ZMOD4510 = zmod_ns.class_('ZMOD4510', i2c.I2CDevice, cg.Component)
+ZMOD4510 = zmod4510_ns.class_('ZMOD4510', i2c.I2CDevice, cg.Component)
 
 # Define configuration keys.
 CONF_NO2 = "no2"
