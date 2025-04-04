@@ -25,7 +25,7 @@
 #ifndef _ZMOD4XXX_HAL_H_
 #define _ZMOD4XXX_HAL_H_
 
-#include "hal/hal.h"
+#include "hal.h"
 #include "zmod4xxx_types.h"
 
 #ifdef __cplusplus
