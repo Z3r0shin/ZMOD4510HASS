@@ -1,29 +1,30 @@
 #pragma once
 
-#include "esphome.h"
+#include "esphome/core/component.h"
 #include "esphome/components/sensor/sensor.h"
+#include "esphome/components/i2c/i2c.h"
+#include <cstring>  // For memcpy
 
 // Include the Renesas library headers via extern "C"
-extern "C" {
-  #include "hal.h"
-  #include "zmod4xxx_hal.h"
-  #include "zmod4xxx.h"
-  #include "hsxxxx.h"
-  #include "no2_o3.h"
-  #include "zmod4510_config_no2_o3.h"
-  #include "zmod4xxx_cleaning.h"
-}
+ #include "hal.h"
+ #include "zmod4xxx_hal.h"
+ #include "zmod4xxx.h"
+ #include "hsxxxx.h"
+ #include "no2_o3.h"
+ #include "zmod4510_config_no2_o3.h"
+ #include "zmod4xxx_cleaning.h"
+
 
 namespace zmod4510 {
 
-class ZMOD4510 : public PollingComponent {
+class ZMOD4510 : public esphome::PollingComponent, public esphome::i2c::I2CDevice {
  public:
   ZMOD4510();
 
   void set_i2c_address(uint8_t address);
-  void set_no2_sensor(sensor::Sensor *sensor);
-  void set_o3_sensor(sensor::Sensor *sensor);
-  void set_aqi_sensor(sensor::Sensor *sensor);
+  void set_no2_sensor(esphome::sensor::Sensor *sensor);
+  void set_o3_sensor(esphome::sensor::Sensor *sensor);
+  void set_aqi_sensor(esphome::sensor::Sensor *sensor);
 
   // Component lifecycle functions
   void setup() override;
@@ -31,9 +32,9 @@ class ZMOD4510 : public PollingComponent {
 
  protected:
   uint8_t i2c_address_;
-  sensor::Sensor *no2_sensor_{nullptr};
-  sensor::Sensor *o3_sensor_{nullptr};
-  sensor::Sensor *aqi_sensor_{nullptr};
+  esphome::sensor::Sensor *no2_sensor_{nullptr};
+  esphome::sensor::Sensor *o3_sensor_{nullptr};
+  esphome::sensor::Sensor *aqi_sensor_{nullptr};
 
   // Device structure and algorithm handle (from Renesas library)
   zmod4xxx_dev_t dev_;
