@@ -9,7 +9,7 @@ AUTO_LOAD = ["sensor"]
 DEPENDENCIES = ['i2c']
 
 # Create a namespace for your component.
-zmod_ns = cg.global_ns.namespace('zmod4510')
+zmod4510_ns = cg.global_ns.namespace('zmod4510')
 # Declare the main C++ class. It must be defined in your C++ wrapper.
 ZMOD4510 = zmod_ns.class_('ZMOD4510', i2c.I2CDevice, cg.Component)
 
@@ -32,14 +32,16 @@ CONFIG_SCHEMA = cv.Schema({
 # The to_code function converts the YAML configuration into C++ code.
 async def to_code(config):
     var = cg.new_Pvariable(config[CONF_ID])
+    await cg.register_component(var, config)
+    await cg.register_polling_component(var, config)
     cg.add(var.set_update_interval(config[CONF_UPDATE_INTERVAL]))
-    cg.add(var.set_i2c_address(config[CONF_I2C_ADDRESS]))
-    if CONF_NO2 in config:
-        no2_sensor = await sensor.new_sensor(config[CONF_NO2])
+    cg.add(var.set_i2c_address(config['i2c_address']))
+    if 'no2' in config:
+        no2_sensor = await sensor.new_sensor(config['no2'])
         cg.add(var.set_no2_sensor(no2_sensor))
-    if CONF_O3 in config:
-        o3_sensor = await sensor.new_sensor(config[CONF_O3])
+    if 'o3' in config:
+        o3_sensor = await sensor.new_sensor(config['o3'])
         cg.add(var.set_o3_sensor(o3_sensor))
-    if CONF_AQI in config:
-        aqi_sensor = await sensor.new_sensor(config[CONF_AQI])
+    if 'aqi' in config:
+        aqi_sensor = await sensor.new_sensor(config['aqi'])
         cg.add(var.set_aqi_sensor(aqi_sensor))
