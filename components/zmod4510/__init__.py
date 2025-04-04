@@ -1,15 +1,17 @@
 import esphome.codegen as cg
 import esphome.config_validation as cv
-from esphome.components import sensor
+from esphome.components import sensor, i2c
 from esphome.const import CONF_ID, CONF_UPDATE_INTERVAL
 
+
+AUTO_LOAD = ["sensor"]
 # This ensures that the I2C component is available.
 DEPENDENCIES = ['i2c']
 
 # Create a namespace for your component.
-zmod_ns = cg.global_ns.namespace("zmod4510")
+zmod_ns = cg.global_ns.namespace('zmod4510')
 # Declare the main C++ class. It must be defined in your C++ wrapper.
-ZMOD4510 = zmod_ns.class_("ZMOD4510", cg.Component)
+ZMOD4510 = zmod_ns.class_('ZMOD4510', i2c.I2CDevice, cg.Component)
 
 # Define configuration keys.
 CONF_NO2 = "no2"
@@ -25,7 +27,7 @@ CONFIG_SCHEMA = cv.Schema({
     cv.Optional(CONF_NO2): sensor.sensor_schema(),
     cv.Optional(CONF_O3): sensor.sensor_schema(),
     cv.Optional(CONF_AQI): sensor.sensor_schema(),
-}).extend(cv.COMPONENT_SCHEMA).extend(cv.polling_component_schema("60s"))
+}).extend(cv.COMPONENT_SCHEMA).extend(cv.polling_component_schema("60s").extend(i2c.i2c_device_schema(0x33)))
 
 # The to_code function converts the YAML configuration into C++ code.
 async def to_code(config):

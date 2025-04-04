@@ -27,7 +27,7 @@ CONFIG_SCHEMA = cv.Schema({
     cv.Optional(CONF_NO2): sensor.sensor_schema(),
     cv.Optional(CONF_O3): sensor.sensor_schema(),
     cv.Optional(CONF_AQI): sensor.sensor_schema(),
-}).extend(cv.COMPONENT_SCHEMA).extend(cv.polling_component_schema("60s"))
+}).extend(cv.COMPONENT_SCHEMA).extend(cv.polling_component_schema("60s").extend(i2c.i2c_device_schema(0x33)))
 
 # The to_code function converts the YAML configuration into C++ code.
 async def to_code(config):
