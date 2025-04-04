@@ -2,12 +2,23 @@
 #include "esphome/core/log.h"
 #include <Arduino.h>
 #include <cstring>
+#include <cstdarg>
+
+// Fallback definition for esp_log_printf_ if not defined.
+#ifndef esp_log_printf_
+static inline void esp_log_printf_(int level, const char *tag, int line, const char *format, ...) {
+  va_list args;
+  va_start(args, format);
+  vprintf(format, args);
+  va_end(args);
+}
+#endif
 
 namespace zmod4510 {
 
 static const char *TAG = "zmod4510";
 
-ZMOD4510::ZMOD4510() : PollingComponent(60000) {  // Default update interval 60 s
+ZMOD4510::ZMOD4510() : PollingComponent(60000) {  // Default update interval 60s
   this->i2c_address_ = 0x33;
 }
 
@@ -35,7 +46,7 @@ void ZMOD4510::setup() {
   memcpy(this->dev_.config, this->config_, sizeof(this->config_));
   this->dev_.prod_data = this->prod_data_;
 
-  // Assign the configuration arrays from the Renesas library.
+  // Assign pointers to the configuration arrays from the Renesas header.
   this->dev_.init_conf = &zmod_no2_o3_sensor_cfg[INIT];
   this->dev_.meas_conf = &zmod_no2_o3_sensor_cfg[MEASUREMENT];
 
@@ -66,7 +77,7 @@ void ZMOD4510::update() {
     return;
   }
 
-  // Wait for measurement to complete (6000 ms for NO2 O3 mode).
+  // Wait for the measurement to complete (6000 ms for NO2-O3 mode).
   delay(6000);
 
   ret = zmod4xxx_read_adc_result(&this->dev_, this->adc_buffer_);
@@ -75,10 +86,10 @@ void ZMOD4510::update() {
     return;
   }
 
-  // Prepare the inputs for the algorithm.
+  // Prepare algorithm input with default ambient conditions.
   no2_o3_inputs_t algo_input;
   algo_input.adc_result = this->adc_buffer_;
-  algo_input.humidity_pct = 50.0f;      // Default ambient humidity
+  algo_input.humidity_pct = 50.0f;      // Default relative humidity
   algo_input.temperature_degc = 25.0f;    // Default ambient temperature
 
   no2_o3_results_t algo_results;
@@ -92,7 +103,7 @@ void ZMOD4510::update() {
     return;
   }
 
-  ESP_LOGD(TAG, "Algorithm results: NO2: %.2f, O3: %.2f, FAST AQI: %d",
+  ESP_LOGD(TAG, "Algorithm results: NO2: %.2f ppb, O3: %.2f ppb, FAST AQI: %d",
            algo_results.NO2_conc_ppb, algo_results.O3_conc_ppb, algo_results.FAST_AQI);
 
   if (this->no2_sensor_ != nullptr) {
