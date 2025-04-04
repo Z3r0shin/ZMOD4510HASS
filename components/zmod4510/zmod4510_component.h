@@ -6,9 +6,6 @@
 // Include the Renesas library headers via extern "C"
 extern "C" {
   #include "src/no2_o3-arduino.h"
-  #include "src/zmod4xxx.h"
-  #include "src/algos/zmod4510_config_no2_o3.h"
-  #include "src/algos/zmod4xxx_cleaning.h"
 }
 
 namespace zmod4510 {
