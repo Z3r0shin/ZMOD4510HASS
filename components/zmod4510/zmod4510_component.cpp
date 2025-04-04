@@ -1,7 +1,10 @@
+#include "zmod4510_component.h"
+#include "esphome/core/log.h"
+#include <Arduino.h>
+#include <cstring>
 #include <cstdarg>
-#include <cstdio>
 
-// Fallback definition for esp_log_printf_ in global scope if it's not defined.
+// If esp_log_printf_ is not defined, supply a fallback definition.
 #ifndef esp_log_printf_
 static inline void esp_log_printf_(int level, const char *tag, int line, const char *format, ...) {
   va_list args;
@@ -11,10 +14,10 @@ static inline void esp_log_printf_(int level, const char *tag, int line, const c
 }
 #endif
 
-#include "zmod4510_component.h"
-#include "esphome/core/log.h"
-#include <Arduino.h>
-#include <cstring>
+// Ensure the algorithm functions use C linkage.
+extern "C" {
+  #include "no2_o3.h"  // This header should declare init_no2_o3() and calc_no2_o3() with extern "C"
+}
 
 namespace zmod4510 {
 
@@ -79,7 +82,8 @@ void ZMOD4510::update() {
     return;
   }
 
-  delay(6000);  // Wait for measurement to complete (6000 ms for NO₂/O₃ mode).
+  // Wait for the measurement to complete (6000 ms for NO₂/O₃ mode).
+  delay(6000);
 
   ret = zmod4xxx_read_adc_result(&this->dev_, this->adc_buffer_);
   if (ret != ZMOD4XXX_OK) {
@@ -87,7 +91,7 @@ void ZMOD4510::update() {
     return;
   }
 
-  // Set up algorithm input with default ambient values.
+  // Prepare algorithm input with default ambient conditions.
   no2_o3_inputs_t algo_input;
   algo_input.adc_result = this->adc_buffer_;
   algo_input.humidity_pct = 50.0f;      // Default: 50% RH
