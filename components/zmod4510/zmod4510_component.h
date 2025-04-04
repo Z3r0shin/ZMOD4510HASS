@@ -7,10 +7,10 @@
 
 // Include the Renesas library headers via extern "C"
  #include "zmod4xxx_types.h"
- #include "hal.h"
- #include "zmod4xxx_hal.h"
+ //#include "hal.h"
+ //#include "zmod4xxx_hal.h"
  #include "zmod4xxx.h"
- #include "hsxxxx.h"
+ //#include "hsxxxx.h"
  #include "no2_o3.h"
  #include "zmod4510_config_no2_o3.h"
  #include "zmod4xxx_cleaning.h"
