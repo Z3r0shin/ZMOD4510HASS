@@ -30,13 +30,12 @@ void ZMOD4510::set_aqi_sensor(esphome::sensor::Sensor *sensor) {
 void ZMOD4510::setup() {
   ESP_LOGI(TAG, "Setting up ZMOD4510 sensor");
 
-  // Initialize device structure
+  // Initialize the device structure.
   this->dev_.i2c_addr = this->i2c_address_;
-  // Copy the configuration buffer (arrays cannot be assigned directly)
   memcpy(this->dev_.config, this->config_, sizeof(this->config_));
   this->dev_.prod_data = this->prod_data_;
 
-  // Set the configuration pointers from the Renesas config arrays.
+  // Assign the configuration arrays from the Renesas library.
   this->dev_.init_conf = &zmod_no2_o3_sensor_cfg[INIT];
   this->dev_.meas_conf = &zmod_no2_o3_sensor_cfg[MEASUREMENT];
 
@@ -67,7 +66,7 @@ void ZMOD4510::update() {
     return;
   }
 
-  // Wait for the sensor to complete its measurement (6000 ms for NO2 O3 mode)
+  // Wait for measurement to complete (6000 ms for NO2 O3 mode).
   delay(6000);
 
   ret = zmod4xxx_read_adc_result(&this->dev_, this->adc_buffer_);
@@ -76,11 +75,11 @@ void ZMOD4510::update() {
     return;
   }
 
-  // Prepare algorithm inputs with default ambient conditions.
+  // Prepare the inputs for the algorithm.
   no2_o3_inputs_t algo_input;
   algo_input.adc_result = this->adc_buffer_;
-  algo_input.humidity_pct = 50.0f;      // Default 50% RH
-  algo_input.temperature_degc = 25.0f;    // Default 25 °C
+  algo_input.humidity_pct = 50.0f;      // Default ambient humidity
+  algo_input.temperature_degc = 25.0f;    // Default ambient temperature
 
   no2_o3_results_t algo_results;
   ret = calc_no2_o3(&this->algo_handle_, &this->dev_, &algo_input, &algo_results);
@@ -93,7 +92,7 @@ void ZMOD4510::update() {
     return;
   }
 
-  ESP_LOGD(TAG, "Algorithm results: NO2: %.2f ppb, O3: %.2f ppb, FAST AQI: %d",
+  ESP_LOGD(TAG, "Algorithm results: NO2: %.2f, O3: %.2f, FAST AQI: %d",
            algo_results.NO2_conc_ppb, algo_results.O3_conc_ppb, algo_results.FAST_AQI);
 
   if (this->no2_sensor_ != nullptr) {
