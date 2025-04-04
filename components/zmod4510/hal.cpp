@@ -17,7 +17,7 @@
  */
 
 #include <stdio.h>
-#include "hal/hal.h"
+#include "hal.h"
 
 static struct {
   int                     error;

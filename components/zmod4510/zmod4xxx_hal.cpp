@@ -16,9 +16,9 @@
 
 #include <string.h>   /* requried for memcpy declaration */
 
-#include "hal/hal.h"
-#include "hal/zmod4xxx_hal.h"
-#include "sensors/zmod4xxx_types.h"
+#include "hal.h"
+#include "zmod4xxx_hal.h"
+#include "zmod4xxx_types.h"
 
 static Interface_t* _hal;
 
