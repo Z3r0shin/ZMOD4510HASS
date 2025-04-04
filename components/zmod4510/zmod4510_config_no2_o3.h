@@ -18,6 +18,7 @@
 #define _ZMOD4510_CONFIG_NO2_O3_H_
 
 #include <stdio.h>
+#include "zmod4xxx_types.h"
 
 #define INIT        0
 #define MEASUREMENT 1

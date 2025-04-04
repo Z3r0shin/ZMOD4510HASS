@@ -29,6 +29,7 @@ extern "C" {
 
 #include <stdint.h>
 #include <math.h>
+#include "zmod4xxx_types.h"
 
 /**
 * @brief Variables that describe the library version
